@@ -1,1274 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>TapText - Social Media Platform</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TapText</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-
-  :root {
-    --blue: #005bbb;
-    --blue-dark: #004080;
-    --gray-light: #f0f4ff;
-    --gray-dark: #222;
-    --background-light: #e0f2ff;
-    --background-dark: #121212;
-    --text-light: #1a1a1a;
-    --text-dark: #ddd;
-    --border-radius: 12px;
-  }
-  [data-theme="dark"] {
-    --background: var(--background-dark);
-    --text-color: var(--text-dark);
-    --bg-panel: #1c1c1c;
-    --input-bg: #2a2a2a;
-    --input-border: #555;
-    --btn-bg: var(--blue-dark);
-    --btn-hover: #003f7f;
-  }
-  [data-theme="light"] {
-    --background: var(--background-light);
-    --text-color: var(--text-light);
-    --bg-panel: white;
-    --input-bg: #f9fbff;
-    --input-border: #90c4ff;
-    --btn-bg: var(--blue);
-    --btn-hover: var(--blue-dark);
-  }
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0; padding: 0; 
-    font-family: 'Inter', sans-serif;
-    background: var(--background);
-    color: var(--text-color);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  header {
-    background: var(--btn-bg);
-    color: white;
-    padding: 1rem 2rem;
-    font-weight: 700;
-    font-size: 2rem;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header .title {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  header .title .verified {
-    width: 22px; height: 22px;
-    fill: #4caf50;
-  }
-  header button#themeToggle {
-    background: transparent;
-    border: 2px solid white;
-    border-radius: var(--border-radius);
-    color: white;
-    font-weight: 600;
-    padding: 0.3rem 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  header button#themeToggle:hover {
-    background-color: rgba(255,255,255,0.2);
-  }
-  main {
-    flex: 1;
-    display: flex;
-    gap: 1rem;
-    max-width: 1200px;
-    margin: 1rem auto;
-    padding: 0 1rem;
-  }
-  nav#sidebar {
-    flex: 0 0 280px;
-    background: var(--bg-panel);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
-  }
-  nav#sidebar h2 {
-    margin: 0 0 1rem 0;
-    font-weight: 700;
-    font-size: 1.4rem;
-    border-bottom: 2px solid var(--btn-bg);
-    padding-bottom: 0.4rem;
-  }
-  nav#sidebar button {
-    width: 100%;
-    padding: 0.7rem;
-    background: var(--btn-bg);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  nav#sidebar button:hover {
-    background: var(--btn-hover);
-  }
-  section#content {
-    flex: 1;
-    background: var(--bg-panel);
-    border-radius: var(--border-radius);
-    padding: 1rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
-  }
-  /* Login/Register panels */
-  #authPanel {
-    max-width: 380px;
-    margin: 0 auto;
-    background: var(--input-bg);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
-  }
-  #authPanel h2 {
-    margin-top: 0;
-    font-weight: 700;
-    color: var(--btn-bg);
-    margin-bottom: 1rem;
-  }
-  #authPanel label {
-    display: block;
-    margin: 0.7rem 0 0.3rem 0;
-    font-weight: 600;
-  }
-  #authPanel input, #authPanel select {
-    width: 100%;
-    padding: 0.6rem 0.9rem;
-    border-radius: 8px;
-    border: 2px solid var(--input-border);
-    font-size: 1rem;
-    background: var(--input-bg);
-    color: var(--text-color);
-    transition: border-color 0.3s ease;
-  }
-  #authPanel input:focus, #authPanel select:focus {
-    outline: none;
-    border-color: var(--btn-bg);
-    background: var(--background-light);
-  }
-  #authPanel button {
-    margin-top: 1.5rem;
-    width: 100%;
-    padding: 0.9rem;
-    background: var(--btn-bg);
-    color: white;
-    font-weight: 700;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  #authPanel button:hover:not(:disabled) {
-    background: var(--btn-hover);
-  }
-  #authPanel button:disabled {
-    background: #999;
-    cursor: default;
-  }
-  #authError {
-    color: #b22222;
-    margin-top: 0.6rem;
-    font-weight: 700;
-    min-height: 1.4rem;
-    user-select: none;
-  }
-  /* User profile sidebar */
-  #userProfile {
-    background: var(--input-bg);
-    padding: 1rem;
-    border-radius: var(--border-radius);
-    box-shadow: inset 0 0 8px rgb(0 0 0 / 0.05);
-    user-select: none;
-  }
-  #userProfile h3 {
-    margin-top: 0;
-    margin-bottom: 0.6rem;
-    font-weight: 700;
-    color: var(--btn-bg);
-  }
-  #userProfile .verifiedTick {
-    vertical-align: middle;
-    width: 20px;
-    height: 20px;
-    fill: #4caf50;
-    margin-left: 5px;
-  }
-  #userProfile p {
-    margin: 0.3rem 0;
-  }
-  #userProfile button {
-    margin-top: 1rem;
-    width: 100%;
-    padding: 0.6rem;
-    border-radius: var(--border-radius);
-    border: none;
-    background: var(--btn-bg);
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  #userProfile button:hover {
-    background: var(--btn-hover);
-  }
-  /* Follow list */
-  #followList {
-    margin-top: 1rem;
-  }
-  #followList h4 {
-    margin: 0 0 0.5rem 0;
-    font-weight: 700;
-  }
-  #followList ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-    max-height: 150px;
-    overflow-y: auto;
-  }
-  #followList ul li {
-    padding: 0.3rem 0;
-    border-bottom: 1px solid var(--input-border);
-    cursor: pointer;
-  }
-  #followList ul li:hover {
-    background-color: var(--gray-light);
-  }
-  /* Search */
-  #searchSection {
-    margin-bottom: 1rem;
-  }
-  #searchInput {
-    width: 100%;
-    padding: 0.6rem 0.9rem;
-    font-size: 1rem;
-    border-radius: var(--border-radius);
-    border: 2px solid var(--input-border);
-  }
-  #searchInput:focus {
-    outline: none;
-    border-color: var(--btn-bg);
-  }
-  /* Posts feed */
-  #postsFeed {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 8px;
-    max-height: 600px;
-  }
-  .post {
-    background: var(--input-bg);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 10px rgb(0 0 0 / 0.06);
-  }
-  .post .post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .post .post-header strong {
-    font-weight: 700;
-    color: var(--btn-bg);
-  }
-  .post .post-header .verifiedTick {
-    width: 16px;
-    height: 16px;
-    fill: #4caf50;
-    margin-left: 4px;
-    vertical-align: middle;
-  }
-  .post .post-header .timestamp {
-    font-size: 0.8rem;
-    color: #777;
-  }
-  .post .post-content {
-    margin-top: 0.6rem;
-    white-space: pre-wrap;
-    font-size: 1rem;
-  }
-  .post img, .post video {
-    max-width: 100%;
-    border-radius: var(--border-radius);
-    margin-top: 0.7rem;
-  }
-  /* Post creation */
-  #newPostSection {
-    background: var(--input-bg);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    box-shadow: inset 0 0 8px rgb(0 0 0 / 0.05);
-  }
-  #newPostSection textarea {
-    width: 100%;
-    resize: vertical;
-    min-height: 80px;
-    border-radius: 8px;
-    padding: 0.7rem;
-    font-size: 1rem;
-    border: 2px solid var(--input-border);
-    background: var(--input-bg);
-    color: var(--text-color);
-    transition: border-color 0.3s ease;
-  }
-  #newPostSection textarea:focus {
-    outline: none;
-    border-color: var(--btn-bg);
-  }
-  #newPostSection input[type="url"] {
-    width: 100%;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 2px solid var(--input-border);
-    background: var(--input-bg);
-    color: var(--text-color);
-    transition: border-color 0.3s ease;
-  }
-  #newPostSection input[type="url"]:focus {
-    outline: none;
-    border-color: var(--btn-bg);
-  }
-  #newPostSection label {
-    margin-top: 0.5rem;
-    display: block;
-    font-weight: 600;
-  }
-  #newPostSection select {
-    margin-top: 0.3rem;
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 8px;
-    border: 2px solid var(--input-border);
-    background: var(--input-bg);
-    color: var(--text-color);
-  }
-  #newPostSection select:focus {
-    outline: none;
-    border-color: var(--btn-bg);
-  }
-  #newPostSection button {
-    margin-top: 1rem;
-    padding: 0.85rem 1.2rem;
-    font-weight: 700;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: var(--border-radius);
-    background: var(--btn-bg);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  #newPostSection button:hover:not(:disabled) {
-    background: var(--btn-hover);
-  }
-  #newPostSection button:disabled {
-    background: #999;
-    cursor: default;
-  }
-  /* Messages / DMs */
-  #dmCenter {
-    background: var(--input-bg);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    max-height: 450px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: inset 0 0 8px rgb(0 0 0 / 0.05);
-  }
-  #dmUsersList {
-    flex: 0 0 140px;
-    overflow-y: auto;
-    border-right: 1px solid var(--input-border);
-  }
-  #dmUsersList ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-  #dmUsersList ul li {
-    padding: 0.5rem 0.6rem;
-    border-bottom: 1px solid var(--input-border);
-    cursor: pointer;
-  }
-  #dmUsersList ul li:hover, #dmUsersList ul li.active {
-    background-color: var(--gray-light);
-  }
-  #dmMessages {
-    flex: 1;
-    padding-left: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-  #dmMessages .message {
-    margin-bottom: 0.8rem;
-    max-width: 70%;
-    padding: 0.6rem 1rem;
-    border-radius: var(--border-radius);
-    word-wrap: break-word;
-    user-select: none;
-  }
-  #dmMessages .message.sent {
-    background-color: var(--btn-bg);
-    color: white;
-    align-self: flex-end;
-    border-bottom-right-radius: 0;
-  }
-  #dmMessages .message.received {
-    background-color: var(--gray-light);
-    color: var(--text-color);
-    align-self: flex-start;
-    border-bottom-left-radius: 0;
-  }
-  #dmInputContainer {
-    margin-top: auto;
-    display: flex;
-    gap: 0.6rem;
-  }
-  #dmInput {
-    flex: 1;
-    padding: 0.6rem 0.9rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 2px solid var(--input-border);
-    background: var(--input-bg);
-    color: var(--text-color);
-    transition: border-color 0.3s ease;
-  }
-  #dmInput:focus {
-    outline: none;
-    border-color: var(--btn-bg);
-  }
-  #dmSendBtn {
-    background: var(--btn-bg);
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 0 1.4rem;
-    color: white;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  #dmSendBtn:hover {
-    background: var(--btn-hover);
-  }
-  /* Admin Panel */
-  #adminPanel {
-    background: var(--input-bg);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    box-shadow: inset 0 0 8px rgb(0 0 0 / 0.05);
-    max-height: 500px;
-    overflow-y: auto;
-  }
-  #adminPanel h3 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    font-weight: 700;
-    color: var(--btn-bg);
-  }
-  #adminUserList div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.3rem 0.6rem;
-    border-bottom: 1px solid var(--input-border);
-  }
-  #adminUserList div:last-child {
-    border-bottom: none;
-  }
-  #adminUserList strong {
-    color: var(--btn-bg);
-    font-weight: 700;
-  }
-  #adminUserList button {
-    margin-left: 0.3rem;
-    background: var(--btn-bg);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 0.3rem 0.7rem;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: background-color 0.3s ease;
-  }
-  #adminUserList button:hover {
-    background-color: var(--btn-hover);
-  }
-  /* Responsive */
-  @media (max-width: 900px) {
-    main {
-      flex-direction: column;
-    }
-    nav#sidebar {
-      flex: none;
-      width: 100%;
-      order: 2;
-    }
-    section#content {
-      order: 1;
-    }
-    #dmCenter {
-      max-height: 300px;
-      flex-direction: column;
-    }
-    #dmUsersList {
-      flex: none;
-      max-height: 100px;
-      border-right: none;
-      border-bottom: 1px solid var(--input-border);
-    }
-    #dmMessages {
-      flex: 1;
-      padding-left: 0;
-      max-height: 150px;
-      overflow-y: auto;
-    }
-  }
+/* ========== GLOBAL STYLES & THEMES ========== */
+:root {
+  --bg: #fafbfc;
+  --panel: #fff;
+  --text: #1a1a1a;
+  --accent: #005bbb;
+  --accent-hover: #004080;
+  --border: #d0e4ff;
+  --warn: #b22222;
+}
+[data-theme='dark'] {
+  --bg: #1a1a1a;
+  --panel: #252525;
+  --text: #fafbfc;
+  --border: #3c3c3c;
+}
+* { margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif; }
+body,html { height:100%; background:var(--bg); color:var(--text); }
+button,input,textarea { font:inherit; }
+button { cursor:pointer;background:var(--accent);color:white;border:none;border-radius:6px;padding:.6rem 1.2rem;transition:.2s; }
+button:hover:not(:disabled) { background:var(--accent-hover); }
+button:disabled { background:#999;cursor:default; }
+input,textarea { width:100%;padding:.6rem;border:2px solid var(--border);border-radius:6px;transition:.2s; }
+input:focus,textarea:focus { outline:none;border:2px solid var(--accent); }
+textarea { resize:vertical; }
+header,footer { text-align:center;padding:1rem;background:var(--accent);color:white; }
+#uiRoot { display:flex;flex-direction:column;height:100vh; }
+#authUI { margin:auto;max-width:360px;width:100%; }
+#mainContainer { display:flex;flex:1;overflow:hidden; }
+#sidebar,#feedPane,#dmPane { background:var(--panel);padding:1rem;overflow-y:auto; }
+#sidebar { flex:1 0 280px;border-right:1px solid var(--border); }
+#feedPane { flex:2; }
+#dmPane { flex:1 0 320px;border-left:1px solid var(--border); }
+.card { background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;overflow:hidden; }
+.card-header { padding:.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center; }
+.card-content { padding:.8rem; }
+.list-item { padding:.6rem;border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between; }
+.list-item:last-child { border-bottom:none; }
+.list-item:hover { background:#f0f6ff; }
+.selected { background:var(--accent);color:white; }
+.hidden { display:none !important; }
+.admin-row { display:flex;justify-content:space-between;align-items:center;padding:.6rem;border-bottom:1px solid var(--border); }
+.admin-row:last-child { border-bottom:none; }
+.warn { color:var(--warn);font-weight:700;margin:0.5rem 0; }
+input[type=file] { padding:0; }
 </style>
 </head>
 <body data-theme="light">
-
-<header>
-  <div class="title">
-    TapText 
-    <svg class="verified" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 16.2l-4.2-4.2 1.4-1.4 2.8 2.8 6.3-6.3 1.4 1.4z"/></svg>
+<header>TapText</header>
+<div id="uiRoot">
+  <!-- AUTH SECTION -->
+  <div id="authUI" class="card">
+    <div class="card-header">TapText Login or Sign‑Up</div>
+    <div class="card-content">
+      <input id="authName" placeholder="Username (letters/numbers/_)">
+      <input id="authPass" type="password" placeholder="Password (min 6 chars)">
+      <button id="authBtn">Login / Sign Up</button>
+      <p id="authErr" class="warn"></p>
+    </div>
   </div>
-  <button id="themeToggle">Dark Mode</button>
-</header>
 
-<main>
-  <nav id="sidebar">
-    <div id="userProfile" style="display:none;">
-      <h3 id="profileUsername"></h3>
-      <p><strong>Role:</strong> <span id="profileRole"></span></p>
-      <p><strong>Age:</strong> <span id="profileAge"></span></p>
-      <button id="logoutBtn">Logout</button>
+  <!-- MAIN UI -->
+  <div id="mainContainer" class="hidden">
+    <!-- Left Sidebar -->
+    <div id="sidebar">
+      <h3>Users</h3>
+      <input id="searchUser" placeholder="Search users...">
+      <div id="userList"></div>
+      <button id="themeToggle" style="margin-top:1rem;">Toggle Dark Mode</button>
     </div>
 
-    <div id="authPanel">
-      <h2 id="authTitle">Login</h2>
-      <label for="usernameInput">Username</label>
-      <input id="usernameInput" type="text" autocomplete="username" />
-      <label for="passwordInput">Password</label>
-      <input id="passwordInput" type="password" autocomplete="current-password" />
-      <div id="registerFields" style="display:none;">
-        <label for="passwordConfirmInput">Confirm Password</label>
-        <input id="passwordConfirmInput" type="password" autocomplete="new-password" />
-        <label for="birthdateInput">Birthdate</label>
-        <input id="birthdateInput" type="date" max="" />
-        <label for="parentCheckbox"><input type="checkbox" id="parentCheckbox" /> I am a parent managing child accounts</label>
-      </div>
-      <button id="authSubmitBtn" disabled>Login</button>
-      <p id="authError"></p>
-      <p style="margin-top:1rem; font-size:0.9rem;">
-        <span id="toggleAuthText">Don't have an account? <a href="#" id="toggleAuthLink">Register</a></span>
-      </p>
-    </div>
-
-    <div id="followList" style="display:none;">
-      <h4>Following</h4>
-      <ul id="followingUl"></ul>
-    </div>
-
-    <div id="searchSection" style="display:none;">
-      <input id="searchInput" type="search" placeholder="Search users..." />
-    </div>
-
-    <div id="adminPanel" style="display:none;">
-      <h3>Admin Panel</h3>
-      <div id="adminUserList"></div>
-    </div>
-  </nav>
-
-  <section id="content" style="display:none;">
-    <div id="newPostSection">
-      <textarea id="postText" placeholder="What's on your mind?"></textarea>
-      <label for="postMediaUrl">Image/Video URL (optional)</label>
-      <input id="postMediaUrl" type="url" placeholder="https://example.com/media.jpg or .mp4" />
-      <label for="postAgeRestriction">Restrict post to age group:</label>
-      <select id="postAgeRestriction">
-        <option value="all" selected>All ages</option>
-        <option value="13+">13 and above</option>
-        <option value="18+">18 and above</option>
-      </select>
-      <button id="postSubmitBtn" disabled>Post</button>
-    </div>
-
-    <div id="postsFeed"></div>
-
-    <div id="dmCenter" style="display:none;">
-      <div style="display:flex; height: 100%;">
-        <div id="dmUsersList">
-          <ul></ul>
+    <!-- Feed Pane -->
+    <div id="feedPane">
+      <h3>Your Feed</h3>
+      <div class="card" id="newPostCard">
+        <div class="card-header">Create Post</div>
+        <div class="card-content">
+          <textarea id="postText" placeholder="What's new?"></textarea>
+          <input id="postImg" placeholder="Image or Video URL (YouTube/Vimeo)">
+          <button id="postBtn" style="margin-top:.6rem;">Post</button>
         </div>
-        <div id="dmMessages">
-          <div></div>
-          <div id="dmInputContainer">
-            <input id="dmInput" placeholder="Type a message..." />
-            <button id="dmSendBtn">Send</button>
-          </div>
+      </div>
+      <div id="postsFeed"></div>
+    </div>
+
+    <!-- DM Pane -->
+    <div id="dmPane">
+      <h3>Direct Messages</h3>
+      <div id="dmUsersList"></div>
+      <div id="dmChatCard" class="card hidden">
+        <div class="card-header">
+          <span id="dmHeader"></span>
+        </div>
+        <div class="card-content" style="height:200px;overflow-y:auto;" id="dmMessages"></div>
+        <div class="card-footer">
+          <input id="dmInput" placeholder="Type a message...">
+          <button id="dmSendBtn" disabled>Send</button>
         </div>
       </div>
     </div>
-  </section>
-</main>
+  </div>
+</div>
+
+<footer>&copy; TapText 2025</footer>
 
 <script>
-  // Backend config
-  const BIN_ID = "6863fa078561e97a502fb26c";
-  const WRITE_KEY = "$2a$10$4EX1ZT6TPAE1x4NBUFgmt.Qvwek6Ognuqf1kNZ.Y8IjLfKf2i0GUG";
-  const READ_KEY = WRITE_KEY;
+/* ========== DATA & STATE ========== */
+const adminUsers = {'admin':{pw:'AdminPass123!',role:'admin',banned:false,warning:'',followers:[],following:[],dm:{}}};
+let users = {...adminUsers};
+let posts = [], dms = {};
+let session = null, currentDM=null;
 
-  // Globals
-  let currentUser = null; // Object {username, role, birthdate, following:[], children:[], parentOf:[], banned, warnings}
-  let allUsers = {};      // {username: userData}
-  let posts = [];         // [{id, author, content, mediaUrl, ageRestriction, timestamp}]
-  let dms = {};           // {username1: {username2: [{from, to, text, timestamp}]}}
-  let activeDMUser = null;
+/* ========== UTILITIES ========== */
+function $(s){return document.querySelector(s);}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text)e.textContent=text;return e;}
+function save(){localStorage.setItem('tt_users',JSON.stringify(users));localStorage.setItem('tt_posts',JSON.stringify(posts));localStorage.setItem('tt_dms',JSON.stringify(dms));localStorage.setItem('tt_session',JSON.stringify(session));}
+function load(){
+  try{const u=JSON.parse(localStorage.getItem('tt_users'));if(u){users={...adminUsers,...u};}
+    posts=JSON.parse(localStorage.getItem('tt_posts'))||[];
+    dms=JSON.parse(localStorage.getItem('tt_dms'))||{};
+    session=JSON.parse(localStorage.getItem('tt_session'));
+  }catch{}
+}
+function formatTime(ts){return new Date(ts).toLocaleString();}
 
-  // Elements
-  const body = document.body;
-  const themeToggle = document.getElementById("themeToggle");
-  const authPanel = document.getElementById("authPanel");
-  const authTitle = document.getElementById("authTitle");
-  const usernameInput = document.getElementById("usernameInput");
-  const passwordInput = document.getElementById("passwordInput");
-  const passwordConfirmInput = document.getElementById("passwordConfirmInput");
-  const birthdateInput = document.getElementById("birthdateInput");
-  const parentCheckbox = document.getElementById("parentCheckbox");
-  const authSubmitBtn = document.getElementById("authSubmitBtn");
-  const authError = document.getElementById("authError");
-  const toggleAuthText = document.getElementById("toggleAuthText");
-  const toggleAuthLink = document.getElementById("toggleAuthLink");
-  const userProfile = document.getElementById("userProfile");
-  const profileUsername = document.getElementById("profileUsername");
-  const profileRole = document.getElementById("profileRole");
-  const profileAge = document.getElementById("profileAge");
-  const logoutBtn = document.getElementById("logoutBtn");
-  const followList = document.getElementById("followList");
-  const followingUl = document.getElementById("followingUl");
-  const searchSection = document.getElementById("searchSection");
-  const searchInput = document.getElementById("searchInput");
-  const adminPanel = document.getElementById("adminPanel");
-  const adminUserList = document.getElementById("adminUserList");
-  const contentSection = document.getElementById("content");
-  const postText = document.getElementById("postText");
-  const postMediaUrl = document.getElementById("postMediaUrl");
-  const postAgeRestriction = document.getElementById("postAgeRestriction");
-  const postSubmitBtn = document.getElementById("postSubmitBtn");
-  const postsFeed = document.getElementById("postsFeed");
-  const dmCenter = document.getElementById("dmCenter");
-  const dmUsersList = document.querySelector("#dmUsersList ul");
-  const dmMessages = document.querySelector("#dmMessages > div");
-  const dmInput = document.getElementById("dmInput");
-  const dmSendBtn = document.getElementById("dmSendBtn");
-
-  // Admin Credentials (don't change here, part of backend)
-  const ADMIN_USERNAME = "AHDX";
-  const ADMIN_PASSWORD = "AHDXadmin@321";
-
-  // Helper Functions
-  function hashPassword(pw) {
-    // Simple hashing placeholder (replace with real hash in production)
-    return btoa(pw);
+/* ========== AUTH ========= */
+$('#authBtn').onclick=()=>{
+  const name=$('#authName').value.trim(),pw=$('#authPass').value;
+  const warnEl=$('#authErr');
+  warnEl.textContent='';
+  if(!/^\w{3,24}$/.test(name)){warnEl.textContent='Invalid username.';return;}
+  if(pw.length<6){warnEl.textContent='Password too short.';return;}
+  if(users[name]){
+    const u=users[name];
+    if(u.banned){warnEl.textContent='You are banned.';return;}
+    if(u.pw!==pw){warnEl.textContent='Wrong password.';return;}
+  } else {
+    users[name]={pw,role:'user',banned:false,warning:'',followers:[],following:[],dm:{}};
   }
+  session={name,role:users[name].role};
+  save(); showMain();
+};
 
-  function formatDate(d) {
-    const date = new Date(d);
-    return date.toLocaleDateString();
-  }
+$('#themeToggle').onclick=()=>{
+  document.body.setAttribute('data-theme',document.body.getAttribute('data-theme')==='light'?'dark':'light');
+};
 
-  function calculateAge(birthdate) {
-    const b = new Date(birthdate);
-    const diff = Date.now() - b.getTime();
-    const ageDt = new Date(diff);
-    return Math.abs(ageDt.getUTCFullYear() - 1970);
-  }
+/* ========== MAIN UI ========= */
+function showMain(){
+  $('.card#authUI').classList.add('hidden');
+  $('#mainContainer').classList.remove('hidden');
+  renderUsers(); renderPosts(); renderDM(); renderAdmin();
+}
+$('#searchUser').oninput=renderUsers;
+$('#postBtn').onclick=()=>{
+  const txt=$('#postText').value.trim(),img=$('#postImg').value.trim();
+  if(!txt && !img) return alert('Cannot post empty.');
+  posts.unshift({id:Date.now(),author:session.name,text:txt,img,ts:Date.now()});
+  $('#postText').value='';$('#postImg').value='';
+  save(); renderPosts();
+};
 
-  function showError(text) {
-    authError.textContent = text;
-  }
-
-  // Theme toggle
-  themeToggle.addEventListener("click", () => {
-    if (body.getAttribute("data-theme") === "light") {
-      body.setAttribute("data-theme", "dark");
-      themeToggle.textContent = "Light Mode";
-    } else {
-      body.setAttribute("data-theme", "light");
-      themeToggle.textContent = "Dark Mode";
-    }
-  });
-
-  // Set max date for birthdate input (today - 10 years)
-  (function setMaxBirthdate() {
-    const today = new Date();
-    today.setFullYear(today.getFullYear() - 10);
-    birthdateInput.max = today.toISOString().split("T")[0];
-  })();
-
-  // Validate auth form inputs
-  function validateAuthForm() {
-    const username = usernameInput.value.trim();
-    const pw = passwordInput.value;
-    const isRegister = passwordConfirmInput.style.display !== "none";
-    const pwConfirm = passwordConfirmInput.value;
-    const birthdate = birthdateInput.value;
-    if (!username) return false;
-    if (!pw) return false;
-    if (isRegister) {
-      if (pw !== pwConfirm) return false;
-      if (!birthdate) return false;
-      const age = calculateAge(birthdate);
-      if (age < 10) return false;
-    }
-    return true;
-  }
-
-  usernameInput.addEventListener("input", () => {
-    authSubmitBtn.disabled = !validateAuthForm();
-  });
-  passwordInput.addEventListener("input", () => {
-    authSubmitBtn.disabled = !validateAuthForm();
-  });
-  passwordConfirmInput.addEventListener("input", () => {
-    authSubmitBtn.disabled = !validateAuthForm();
-  });
-  birthdateInput.addEventListener("input", () => {
-    authSubmitBtn.disabled = !validateAuthForm();
-  });
-
-  // Toggle login/register mode
-  toggleAuthLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (authTitle.textContent === "Login") {
-      // Switch to Register
-      authTitle.textContent = "Register";
-      passwordConfirmInput.style.display = "block";
-      birthdateInput.style.display = "block";
-      parentCheckbox.parentElement.style.display = "block";
-      authSubmitBtn.textContent = "Register";
-      toggleAuthText.innerHTML = 'Already have an account? <a href="#" id="toggleAuthLink">Login</a>';
-    } else {
-      // Switch to Login
-      authTitle.textContent = "Login";
-      passwordConfirmInput.style.display = "none";
-      birthdateInput.style.display = "none";
-      parentCheckbox.parentElement.style.display = "none";
-      authSubmitBtn.textContent = "Login";
-      toggleAuthText.innerHTML = 'Don\'t have an account? <a href="#" id="toggleAuthLink">Register</a>';
-    }
-    authSubmitBtn.disabled = !validateAuthForm();
-  });
-
-  // Load users and posts from backend JSONBin
-  async function loadData() {
-    try {
-      const resUsers = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': READ_KEY }
-      });
-      const jsonUsers = await resUsers.json();
-      allUsers = jsonUsers.record.users || {};
-
-      const resPosts = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': READ_KEY }
-      });
-      const jsonPosts = await resPosts.json();
-      posts = jsonPosts.record.posts || [];
-
-      // Pre-create dm structure if missing
-      for (const u in allUsers) {
-        if (!allUsers[u].dms) allUsers[u].dms = {};
-      }
-    } catch (err) {
-      console.error("Failed to load data:", err);
-      allUsers = {};
-      posts = [];
-    }
-  }
-
-  // Save data back to backend JSONBin
-  async function saveData() {
-    const data = {
-      users: allUsers,
-      posts,
+/* ========== USERS + FOLLOW ========= */
+function renderUsers(){
+  const container=$('#userList');container.innerHTML='';
+  const filter=$('#searchUser').value.toLowerCase();
+  Object.keys(users).sort().forEach(u=>{
+    if(u===session.name) return;
+    if(filter && !u.toLowerCase().includes(filter)) return;
+    const row=el('div','list-item');
+    row.textContent=u;
+    const btn=el('button', '', users[session.name].following.includes(u)?'Unfollow':'Follow');
+    btn.onclick=e=>{
+      e.stopPropagation();
+      const f=users[session.name].following;
+      if(f.includes(u)){ f.splice(f.indexOf(u),1); users[u].followers.splice(users[u].followers.indexOf(session.name),1); }
+      else { f.push(u); users[u].followers.push(session.name); }
+      save(); renderUsers(); renderPosts(); renderDM(); renderAdmin();
     };
-    try {
-      await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": WRITE_KEY,
-          "X-Bin-Versioning": "false"
-        },
-        body: JSON.stringify(data)
-      });
-    } catch (err) {
-      console.error("Failed to save data:", err);
+    row.appendChild(btn);
+    container.appendChild(row);
+  });
+}
+
+/* ========== POSTS ========= */
+function renderPosts(){
+  const feed=$('#postsFeed');feed.innerHTML='';
+  const myFollowing = new Set([session.name,...users[session.name].following]);
+  posts.filter(p=>myFollowing.has(p.author)).forEach(p=>{
+    const card=el('div','card');
+    const h=el('div','card-header');
+    h.appendChild(el('span','',p.author));
+    h.appendChild(el('span','',formatTime(p.ts)));
+    card.appendChild(h);
+    const c=el('div','card-content');
+    c.appendChild(el('p','',p.text));
+    if(p.img){
+      if(/youtube\.com|youtu\.be|vimeo\.com/.test(p.img)){
+        const vidDoc = (id)=>`<iframe width="100%" height="200" src="${id}" frameborder="0" allowfullscreen></iframe>`;
+        c.innerHTML+=vidDoc(p.img);
+      }else c.appendChild(el('img','',{src:p.img,style:'max-width:100%;'}));
     }
+    card.appendChild(c);
+    feed.appendChild(card);
+  });
+}
+
+/* ========== DM ========= */
+function renderDM(){
+  const list=$('#dmUsersList');list.innerHTML='';
+  const friends=users[session.name].following;
+  if(friends.length===0){ $('#dmChatCard').classList.add('hidden'); list.appendChild(el('p','', 'Follow users to DM.')); return; }
+  friends.forEach(u=>{
+    const row=el('div','list-item',u);
+    row.onclick=()=>{ currentDM=u; renderDM(); };
+    if(currentDM===u) row.classList.add('selected');
+    list.appendChild(row);
+  });
+  if(currentDM){
+    $('#dmChatCard').classList.remove('hidden');
+    $('#dmHeader').textContent=currentDM;
+    renderMessages();
   }
+}
 
-  // Auth submit handler (login or register)
-  authSubmitBtn.addEventListener("click", async () => {
-    const username = usernameInput.value.trim();
-    const pw = passwordInput.value;
-    const isRegister = authTitle.textContent === "Register";
+function renderMessages(){
+  const key=[session.name,currentDM].sort().join('_');
+  const convo=dms[key]||[];
+  const box=$('#dmMessages');box.innerHTML='';
+  convo.forEach(m=>{
+    const mdiv=el('div','list-item');
+    mdiv.textContent=`${m.from}: ${m.text}`;
+    box.appendChild(mdiv);
+  });
+  $('#dmSendBtn').disabled=true;
+}
 
-    if (isRegister) {
-      // Register
-      if (allUsers[username]) {
-        showError("Username already exists.");
-        return;
-      }
-      if (pw !== passwordConfirmInput.value) {
-        showError("Passwords do not match.");
-        return;
-      }
-      if (!birthdateInput.value) {
-        showError("Please enter your birthdate.");
-        return;
-      }
-      const age = calculateAge(birthdateInput.value);
-      if (age < 10) {
-        showError("You must be at least 10 years old to register.");
-        return;
-      }
+$('#dmInput').oninput=()=>$('#dmSendBtn').disabled=!$('#dmInput').value.trim();
+$('#dmSendBtn').onclick=()=>{
+  const text=$('#dmInput').value.trim();
+  if(!text) return;
+  const key=[session.name,currentDM].sort().join('_');
+  if(!dms[key]) dms[key]=[];
+  dms[key].push({from:session.name,text,ts:Date.now()});
+  $('#dmInput').value='';
+  save(); renderMessages();
+};
 
-      // Parent account flag
-      const isParent = parentCheckbox.checked;
-
-      // Save user
-      allUsers[username] = {
-        username,
-        password: hashPassword(pw),
-        role: "user",
-        birthdate: birthdateInput.value,
-        following: [],
-        children: [],
-        parentOf: [],
-        banned: false,
-        warnings: 0,
-        isParent,
-        dms: {},
+/* ========== ADMIN PANEL ========= */
+function renderAdmin(){
+  if(session.role!=='admin'){ $('#sidebar button#themeToggle').after(''); return; }
+  let adminSection=$('#adminSection');
+  if(!adminSection){
+    adminSection=el('div','','');
+    adminSection.id='adminSection';
+    adminSection.innerHTML='<h3>Admin Panel</h3>';
+    $('#sidebar').appendChild(adminSection);
+  }
+  adminSection.innerHTML='<h3>Admin Panel</h3>';
+  Object.keys(users).sort().forEach(u=>{
+    const udata=users[u];
+    const row=el('div','admin-row');
+    row.appendChild(el('span','',u));
+    if(udata.role!=='admin'){
+      const banBtn=el('button','', udata.banned?'Unban':'Ban');
+      banBtn.onclick=()=>{
+        udata.banned=!udata.banned;
+        if(udata.banned && u===session.name) return alert('Self banned'),location.reload();
+        save(); renderAdmin(); renderUsers();
       };
-      if (isParent) {
-        allUsers[username].role = "parent";
-      }
-      await saveData();
-      showError("");
-      alert("Registration successful! Please log in.");
-      toggleToLogin();
-      return;
-    }
-
-    // Login
-    const user = allUsers[username];
-    if (!user) {
-      showError("User not found.");
-      return;
-    }
-    if (user.banned) {
-      showError("You are banned. Contact admin.");
-      return;
-    }
-    if (user.password !== hashPassword(pw)) {
-      showError("Incorrect password.");
-      return;
-    }
-
-    currentUser = user;
-    showError("");
-    afterLogin();
-  });
-
-  // Toggle to login mode UI
-  function toggleToLogin() {
-    authTitle.textContent = "Login";
-    passwordConfirmInput.style.display = "none";
-    birthdateInput.style.display = "none";
-    parentCheckbox.parentElement.style.display = "none";
-    authSubmitBtn.textContent = "Login";
-    toggleAuthText.innerHTML = 'Don\'t have an account? <a href="#" id="toggleAuthLink">Register</a>';
-    authSubmitBtn.disabled = true;
-  }
-
-  // After login setup UI and data
-  function afterLogin() {
-    authPanel.style.display = "none";
-    userProfile.style.display = "block";
-    followList.style.display = "block";
-    searchSection.style.display = "block";
-    contentSection.style.display = "flex";
-
-    // Show profile info
-    profileUsername.textContent = currentUser.username;
-    profileRole.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
-    profileAge.textContent = calculateAge(currentUser.birthdate);
-
-    // Show verified tick for owner/admin
-    if (currentUser.username === "AHDX" && (currentUser.role === "owner" || currentUser.role === "admin")) {
-      const vt = document.createElement("svg");
-      vt.classList.add("verifiedTick");
-      vt.setAttribute("viewBox", "0 0 24 24");
-      vt.innerHTML = '<path d="M9.5 16.2l-4.2-4.2 1.4-1.4 2.8 2.8 6.3-6.3 1.4 1.4z"/>';
-      profileUsername.appendChild(vt);
-    }
-
-    // Show admin panel if admin/owner
-    if (currentUser.role === "admin" || currentUser.role === "owner") {
-      adminPanel.style.display = "block";
-      renderAdminUserList();
-    } else {
-      adminPanel.style.display = "none";
-    }
-
-    // Load posts and users following
-    renderFollowing();
-    renderPosts();
-    renderDMUsers();
-  }
-
-  // Logout
-  logoutBtn.addEventListener("click", () => {
-    currentUser = null;
-    authPanel.style.display = "block";
-    userProfile.style.display = "none";
-    followList.style.display = "none";
-    searchSection.style.display = "none";
-    contentSection.style.display = "none";
-    authError.textContent = "";
-    usernameInput.value = "";
-    passwordInput.value = "";
-    passwordConfirmInput.value = "";
-    birthdateInput.value = "";
-    parentCheckbox.checked = false;
-  });
-
-  // Render following list
-  function renderFollowing() {
-    followingUl.innerHTML = "";
-    if (!currentUser.following || currentUser.following.length === 0) {
-      followingUl.innerHTML = "<li>You are not following anyone.</li>";
-      return;
-    }
-    currentUser.following.forEach(followee => {
-      const li = document.createElement("li");
-      li.textContent = followee;
-      li.addEventListener("click", () => openUserProfile(followee));
-      followingUl.appendChild(li);
-    });
-  }
-
-  // Open user profile placeholder (can expand later)
-  function openUserProfile(username) {
-    alert("User profile page for: " + username + " (feature coming soon)");
-  }
-
-  // Search users live
-  searchInput.addEventListener("input", () => {
-    const query = searchInput.value.trim().toLowerCase();
-    if (!query) return renderPosts();
-
-    const filteredUsers = Object.keys(allUsers).filter(u => u.toLowerCase().includes(query));
-    postsFeed.innerHTML = "";
-    filteredUsers.forEach(u => {
-      const postList = posts.filter(p => p.author === u);
-      postList.forEach(p => {
-        postsFeed.appendChild(renderPostElement(p));
-      });
-    });
-  });
-
-  // Render posts
-  function renderPosts() {
-    postsFeed.innerHTML = "";
-    const now = Date.now();
-
-    // Show posts where age restriction is ok
-    posts.forEach(post => {
-      const postAuthor = allUsers[post.author];
-      if (!postAuthor) return;
-      const userAge = calculateAge(currentUser.birthdate);
-      // Check age restrictions
-      if (post.ageRestriction === "all" || 
-          (post.ageRestriction === "13+" && userAge >= 13) || 
-          (post.ageRestriction === "18+" && userAge >= 18)) {
-        postsFeed.appendChild(renderPostElement(post));
-      }
-    });
-  }
-
-  // Create post DOM element
-  function renderPostElement(post) {
-    const div = document.createElement("div");
-    div.classList.add("post");
-
-    // Header
-    const header = document.createElement("div");
-    header.classList.add("post-header");
-
-    const authorName = document.createElement("strong");
-    authorName.textContent = post.author;
-
-    // Verified tick for owner/admin
-    if (post.author === "AHDX" && (allUsers[post.author].role === "owner" || allUsers[post.author].role === "admin")) {
-      const vt = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      vt.classList.add("verifiedTick");
-      vt.setAttribute("viewBox", "0 0 24 24");
-      vt.innerHTML = '<path d="M9.5 16.2l-4.2-4.2 1.4-1.4 2.8 2.8 6.3-6.3 1.4 1.4z"/>';
-      authorName.appendChild(vt);
-    }
-
-    const timestamp = document.createElement("span");
-    timestamp.classList.add("timestamp");
-    timestamp.textContent = new Date(post.timestamp).toLocaleString();
-
-    header.appendChild(authorName);
-    header.appendChild(timestamp);
-    div.appendChild(header);
-
-    // Content
-    const content = document.createElement("div");
-    content.classList.add("post-content");
-    content.textContent = post.content;
-    div.appendChild(content);
-
-    // Media if any
-    if (post.mediaUrl) {
-      if (/\.(mp4|webm|ogg)$/i.test(post.mediaUrl)) {
-        const vid = document.createElement("video");
-        vid.src = post.mediaUrl;
-        vid.controls = true;
-        div.appendChild(vid);
-      } else if (/\.(jpeg|jpg|gif|png|svg)$/i.test(post.mediaUrl)) {
-        const img = document.createElement("img");
-        img.src = post.mediaUrl;
-        div.appendChild(img);
-      }
-    }
-    return div;
-  }
-
-  // Post input validation
-  function validatePostForm() {
-    const text = postText.value.trim();
-    if (!text) return false;
-    return true;
-  }
-
-  postText.addEventListener("input", () => {
-    postSubmitBtn.disabled = !validatePostForm();
-  });
-
-  // Submit new post
-  postSubmitBtn.addEventListener("click", async () => {
-    if (!validatePostForm()) return;
-    const newPost = {
-      id: Date.now().toString(),
-      author: currentUser.username,
-      content: postText.value.trim(),
-      mediaUrl: postMediaUrl.value.trim() || null,
-      ageRestriction: postAgeRestriction.value,
-      timestamp: Date.now(),
-    };
-    posts.unshift(newPost);
-    await saveData();
-    renderPosts();
-    postText.value = "";
-    postMediaUrl.value = "";
-    postAgeRestriction.value = "all";
-    postSubmitBtn.disabled = true;
-  });
-
-  // --- DMs functions ---
-  function renderDMUsers() {
-    dmUsersList.innerHTML = "";
-    const userDMs = currentUser.dms || {};
-    Object.keys(userDMs).forEach(username => {
-      const li = document.createElement("li");
-      li.textContent = username;
-      li.addEventListener("click", () => openDM(username));
-      dmUsersList.appendChild(li);
-    });
-    dmCenter.style.display = Object.keys(userDMs).length ? "flex" : "none";
-  }
-
-  function openDM(username) {
-    activeDMUser = username;
-    // Highlight active DM user
-    Array.from(dmUsersList.children).forEach(li => {
-      li.classList.toggle("active", li.textContent === username);
-    });
-    renderDMMessages();
-  }
-
-  function renderDMMessages() {
-    dmMessages.innerHTML = "";
-    if (!activeDMUser) return;
-    const chat = currentUser.dms[activeDMUser] || [];
-    chat.forEach(msg => {
-      const div = document.createElement("div");
-      div.classList.add("message");
-      div.classList.add(msg.from === currentUser.username ? "sent" : "received");
-      div.textContent = msg.text;
-      dmMessages.appendChild(div);
-    });
-    dmMessages.scrollTop = dmMessages.scrollHeight;
-  }
-
-  dmSendBtn.addEventListener("click", async () => {
-    if (!activeDMUser || !dmInput.value.trim()) return;
-    const text = dmInput.value.trim();
-
-    // Add message to current user
-    currentUser.dms[activeDMUser] = currentUser.dms[activeDMUser] || [];
-    currentUser.dms[activeDMUser].push({
-      from: currentUser.username,
-      to: activeDMUser,
-      text,
-      timestamp: Date.now(),
-    });
-
-    // Add message to target user
-    if (allUsers[activeDMUser]) {
-      allUsers[activeDMUser].dms = allUsers[activeDMUser].dms || {};
-      allUsers[activeDMUser].dms[currentUser.username] = allUsers[activeDMUser].dms[currentUser.username] || [];
-      allUsers[activeDMUser].dms[currentUser.username].push({
-        from: currentUser.username,
-        to: activeDMUser,
-        text,
-        timestamp: Date.now(),
-      });
-    }
-
-    await saveData();
-    dmInput.value = "";
-    renderDMMessages();
-    renderDMUsers();
-  });
-
-  // Admin functions
-  function renderAdminUserList() {
-    adminUserList.innerHTML = "";
-    Object.values(allUsers).forEach(user => {
-      const div = document.createElement("div");
-      const info = document.createElement("strong");
-      info.textContent = `${user.username} (${user.role}) [Warnings: ${user.warnings}]`;
-      div.appendChild(info);
-
-      // Ban/unban button
-      const banBtn = document.createElement("button");
-      banBtn.textContent = user.banned ? "Unban" : "Ban";
-      banBtn.addEventListener("click", async () => {
-        if (user.username === currentUser.username) {
-          alert("You cannot ban/unban yourself.");
-          return;
-        }
-        user.banned = !user.banned;
-        await saveData();
-        renderAdminUserList();
-      });
-      div.appendChild(banBtn);
-
-      // Warn button
-      const warnBtn = document.createElement("button");
-      warnBtn.textContent = "Warn";
-      warnBtn.addEventListener("click", async () => {
-        if (user.username === currentUser.username) {
-          alert("You cannot warn yourself.");
-          return;
-        }
-        user.warnings = (user.warnings || 0) + 1;
-        await saveData();
-        renderAdminUserList();
-      });
-      div.appendChild(warnBtn);
-
-      // Reset password
-      const resetBtn = document.createElement("button");
-      resetBtn.textContent = "Reset PW";
-      resetBtn.addEventListener("click", async () => {
-        if (!confirm(`Reset password for ${user.username} to "default123"?`)) return;
-        user.password = hashPassword("default123");
-        await saveData();
-        alert("Password reset to 'default123'");
-      });
-      div.appendChild(resetBtn);
-
-      // Promote/Demote
-      const promoBtn = document.createElement("button");
-      if (user.role === "user" || user.role === "parent") {
-        promoBtn.textContent = "Promote Admin";
-        promoBtn.addEventListener("click", async () => {
-          user.role = "admin";
-          await saveData();
-          renderAdminUserList();
-        });
-      } else if (user.role === "admin") {
-        promoBtn.textContent = "Demote User";
-        promoBtn.addEventListener("click", async () => {
-          user.role = "user";
-          await saveData();
-          renderAdminUserList();
-        });
-      } else {
-        promoBtn.disabled = true;
-      }
-      div.appendChild(promoBtn);
-
-      adminUserList.appendChild(div);
-    });
-  }
-
-  // Load and init
-  (async function init() {
-    await loadData();
-
-    // If owner "AHDX" doesn't exist, create it
-    if (!allUsers["AHDX"]) {
-      allUsers["AHDX"] = {
-        username: "AHDX",
-        password: hashPassword(ADMIN_PASSWORD),
-        role: "owner",
-        birthdate: "1990-01-01",
-        following: [],
-        children: [],
-        parentOf: [],
-        banned: false,
-        warnings: 0,
-        isParent: false,
-        dms: {},
+      const warnBtn=el('button','',udata.warning?'Clear Warn':'Warn');
+      warnBtn.onclick=()=>{
+        const msg=prompt('Warning text:',udata.warning)||'';
+        udata.warning=msg; save(); renderAdmin();
       };
-      await saveData();
+      row.appendChild(banBtn);row.appendChild(warnBtn);
     }
+    adminSection.appendChild(row);
+  });
+}
 
-    toggleToLogin();
-  })();
-
+/* ========== INIT ========= */
+load();
+if(session) showMain();
+else $('#authUI').classList.remove('hidden');
 </script>
 </body>
 </html>
